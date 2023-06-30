@@ -48,6 +48,7 @@ Thumbs.db
 # Python #
 ##########
 *.ipynb_checkpoints/
+__pycache__/
 
 # VSCode #
 ##########
