@@ -7,15 +7,13 @@ readme = "README.md"
 packages = [{include = "poker_dash_board"}]
 
 [tool.poetry.dependencies]
-python = "^3.9"
-numpy = "*"
-streamlit = "*"
-matplotlib = "*"
-streamlit-plotly-events = "*"
-ipdb = "*"
-pandas = "*"
-entrypoints = "^0.4"
-altair = "4"
+python = "^3.11"
+numpy = "^1.25.0"
+pandas = "^2.0.3"
+streamlit = "^1.24.0"
+plotly = "^5.15.0"
+matplotlib = "^3.7.1"
+
 
 [build-system]
 requires = ["poetry-core"]
