@@ -1,4 +1,4 @@
-import tomllib
+import tomli
 from src.collection import get_sheet
 from src.processing import process
 from src.streamlit import make_gui
@@ -6,7 +6,7 @@ from src.streamlit import make_gui
 
 # Load environment variables
 with open("config.toml", "rb") as f:
-    config = tomllib.load(f)
+    config = tomli.load(f)
     
     
 def main():
