@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Frederico Wieser <frederico.wieser@gmail.com>"]
 readme = "README.md"
-packages = [{include = "poker_dash_board"}]
+#packages = [{include = "poker_dash_board"}]
 
 [tool.poetry.dependencies]
 python = "3.9.17"
