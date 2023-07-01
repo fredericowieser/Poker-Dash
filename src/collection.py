@@ -29,7 +29,7 @@ def get_sheet(sheets_id: str, sheet_name: str) -> pd.DataFrame:
     df = pd.read_csv(url)
     df = col_gbp_to_float(df, 'Net (Sterling)')
     df = col_gbp_to_float(df, 'Value of 1 Point')
-    df = hash_player_col(df)
+    #df = hash_player_col(df)
     
     #import ipdb; ipdb.set_trace()
     
