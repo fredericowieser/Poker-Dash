@@ -1,0 +1,3 @@
+SHEETS_URL = 'https://docs.google.com/spreadsheets/d/1AYRYwzKkijjg936bgM7g4I3AmRoAco99FT6RYdHqZXg/edit#gid=819760778'
+SHEETS_ID = '1AYRYwzKkijjg936bgM7g4I3AmRoAco99FT6RYdHqZXg'
+LOG_SHEET_NAME = 'Logs'

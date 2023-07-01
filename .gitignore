@@ -4,7 +4,7 @@
 
 # Environment Variables #
 #########################
-config.toml
+#config.toml
 *.env
 
 # Compiled source #
