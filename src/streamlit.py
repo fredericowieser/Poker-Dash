@@ -1,75 +1,86 @@
 import streamlit as st
+from streamlit_option_menu import option_menu
 import pandas as pd
 import matplotlib.pyplot as plt
 import plotly
 import plotly.express as px
 import plotly.graph_objects as go
 
-def make_gui(df):
+def make_gui(df, players, games):
+    # Side Bar
+    mode: str
+    with st.sidebar:
+        mode = make_sidebar()
+        
+    if mode == "Home": home_page(players)
+    if mode == "Players": players_page(players)
     
-    # Add a title and intro text
+    
+def make_sidebar():
+    choose = option_menu(
+        "Poker Dash", 
+        [
+            "Home",
+            "Players",
+            "Games",
+            "Player Groups",
+            "Running Aggregates",
+            
+        ],
+        icons=[
+            'house',
+            'person',
+            'bullseye',
+            'people',
+            'clock'
+        ],
+        menu_icon="app-indicator",
+        default_index=0,
+        )
+    return choose
+    
+
+def home_page(players):
+    # Title + Intro
     st.title('Poker Dashboard')
     st.text('This is a web app to allow exploration of our weekly Poker games, I hope you enjoy!')
     
-    # Create a section for the dataframe header
-    # st.header('Header of Dataframe')
-    # st.write(df.head())
+    plt.style.use('dark_background')
+    fig, ax = plt.subplots()
+    for player in players:
+        if player.n_games > 4:
+            #if player.name == "Catherine":
+            #    import ipdb; ipdb.set_trace()
+            ax.plot(player.dates, player.running_net, 'o-', label=f'{player.name}')
     
-    names = get_player_names(df)
-    player_logs = get_player_logs(df, names)
-    figs = running_total(player_logs, names)
+    ax.set_xlabel('Date')  # Add an x-label to the axes.
+    ax.set_ylabel('Weekly Net Cash (£GBP)')  # Add a y-label to the axes.
+    ax.set_title('Running Net for All Games')  # Add a title to the axes.
+    ax.legend(bbox_to_anchor=(1.1, 1.05))
+    st.pyplot(fig)
     
-    st.plotly_chart(figs, theme="streamlit", use_container_width=True)
-
-
-def get_player_names(df : pd.DataFrame) -> pd.DataFrame:
-    names = df['Name'].unique()
-    return names
-
-
-def get_player_logs(df, names):
-    """
-    Returns a list of dates with the players corresponding
-    game data where we have colums 'Name' and 'Sterling'
-    """
-    n = len(names)
-    player_logs = []
-    
-    for i in range(n):
-        player_log = df[df["Name"] == names[i]]
-        player_log.index = range(len(player_log.index))
-        player_logs.append(player_log)
-        print(player_log.head)
-        
-    return player_logs
-
-
-def running_total(player_logs, names):
-    figs = []
-    for i in range(len(player_logs)):
-        player_log = player_logs[i]
-        
-        running_totals = []
-        rt_temp = 0
-        
-        test = player_log["Net (Sterling)"]
-        for j in range(player_log.shape[0]):
-            temp = player_log.at[j, "Net (Sterling)"]
-            rt_temp = rt_temp + temp
-            running_totals.append(rt_temp)
-            
-        
-        player_log.insert(1, 'Running Total', running_totals)                
-        
-        # Line plot of Apple stock price
-        fig_temp = go.Scatter(
-            x = player_log['Date'],
-            y = player_log['Running Total'],
-            #name = player_logs[i].at[0, 'Name'],
-            name = names[i]
+def players_page(players):
+    def make_player_info_card(players, key=0):
+        # Net Cash graph creating over all time
+        l = len(players)
+        option = st.selectbox(
+            'Which player to you want to see?',
+            (player.name for player in players),
+            key=f"{key}"
         )
+        for i in range(l):
+            if option == players[i].name:
+                player = players[i]
+                # Player Running Net Graph
+                st.pyplot(player.st_cash_v_time)
         
-        figs.append(fig_temp)
-        
-    return figs
+                # Create Stats Dataframe
+                st.dataframe(player.stats_df)
+            
+    col1, col2 = st.columns(2)
+    with col1:
+        make_player_info_card(players, 1)
+    with col2:
+        make_player_info_card(players, 2)
+
         
