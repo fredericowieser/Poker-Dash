@@ -95,20 +95,27 @@ class Player:
     @property
     def stats_df(self) -> pd.DataFrame:
         def color_red_green_nums(val):
-            if type(val) == (int,float):
-                if val < 0: color = 'red'
-                elif val > 0: color = 'green'
-            else: color = ''
-            
-            return 'background-color: %s' % color
+            if type(val) == str:
+                color = ''
+                try:
+                    val = float(val)
+                    if val < 0: color = 'red'
+                    elif val > 0: color = 'green'
+                    return 'background-color: %s' % color
+                except:
+                    return 'background-color: %s' % color
         
         data = [
-            ["No, Game", self.n_games],
-            ["Avg. Weekly Net", self.avg_net_cash],
+            ["No, Games", '{0:.0f}'.format(self.n_games)],
+            ["Avg. Weekly Net (£GBP)", '{0:.2f}'.format(self.avg_net_cash)],
+            ["Biggest Win (£GBP)", '{0:.2f}'.format(np.max(self.np_net_cash))],
+            ["Biggest Loss (£GBP)", '{0:.2f}'.format(np.min(self.np_net_cash))],
         ]
         
         df = pd.DataFrame(data, columns=['Stat', 'Value'])
+        df = df.set_index(df.columns[0])
         s = df.style.applymap(color_red_green_nums)
+        
         return s
 
 @dataclass
