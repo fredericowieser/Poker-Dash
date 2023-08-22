@@ -1,3 +1,4 @@
+from src.lib import color_red_green_nums
 import streamlit as st
 from streamlit_option_menu import option_menu
 import pandas as pd
@@ -7,6 +8,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 def make_gui(df, players, games):
+    st.set_page_config(layout="wide")
+    
     # Side Bar
     mode: str
     with st.sidebar:
@@ -22,9 +25,9 @@ def make_sidebar():
         [
             "Home",
             "Players",
-            "Games",
-            "Player Groups",
-            "Running Aggregates",
+            #TODO: "Games",
+            #TODO: "Player Groups",
+            #TODO: "Running Aggregates",
             
         ],
         icons=[
@@ -53,12 +56,15 @@ def home_page(players):
             #    import ipdb; ipdb.set_trace()
             ax.plot(player.dates, player.running_net, 'o-', label=f'{player.name}')
     
+    # TODO: Add more advanced lengeding with this 
+    # https://python-graph-gallery.com/web-line-chart-with-labels-at-line-end/
     ax.set_xlabel('Date')  # Add an x-label to the axes.
     ax.set_ylabel('Weekly Net Cash (£GBP)')  # Add a y-label to the axes.
     ax.set_title('Running Net for All Games')  # Add a title to the axes.
     ax.legend(bbox_to_anchor=(1.1, 1.05))
     st.pyplot(fig)
     
+
 def players_page(players):
     def make_player_info_card(players, key=0):
         # Net Cash graph creating over all time
@@ -76,6 +82,9 @@ def players_page(players):
         
                 # Create Stats Dataframe
                 st.dataframe(player.stats_df)
+                
+                # Create Net Cash Dataframe
+                st.dataframe(player.net_cash_df)
             
     col1, col2 = st.columns(2)
     with col1:

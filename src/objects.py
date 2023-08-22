@@ -1,10 +1,12 @@
 from dataclasses import dataclass
 from typing import List
-from src.lib import avg_gbp_in_per_cap
+from src.lib import avg_gbp_in_per_cap, color_red_green_nums
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-   
+
+# Graph Running Net vs Time vertical height
+Y_LIMS = 45
 
 @dataclass
 class Game:
@@ -70,7 +72,6 @@ class Player:
     
     @property
     def running_net(self) -> np.ndarray:
-        # TODO: Fix bug in calculating running_net which seems to be wrong rn
         l = len(self.np_net_cash)
         rolling_cash = np.zeros(l)
         rolling_cash[0] = self.np_net_cash[0]
@@ -78,45 +79,65 @@ class Player:
             rolling_cash[i] = (
                 rolling_cash[i-1] + self.np_net_cash[i]
             )
-        #import ipdb; ipdb.set_trace()
         return rolling_cash
     
     @property
-    def st_cash_v_time(self) -> np.ndarray:       
+    def st_cash_v_time(self) -> np.ndarray:   
+        # TODO:
+        # - Make grid lines more gray and dimmer    
+        # - Add highlighted are underneath curve to x axis
+        # - 
         fig, ax = plt.subplots()
         ax.plot(self.dates, self.running_net, 'o-', label='Running')
         ax.set_xlabel('Dates (DD-MM-YYYY)')  # Add an x-label to the axes.
         ax.set_ylabel('Cash (£GBP)')  # Add a y-label to the axes.
+        ax.set_ylim([-Y_LIMS, Y_LIMS])
         ax.tick_params(axis='x', labelrotation=45)
         ax.set_title(f"Running Net for {self.name}")  # Add a title to the axes.
         ax.grid()
         return fig
+
+    def net_last_n_games(self, n: int) -> np.ndarray:
+        l = len(self.np_net_cash)
+        if n <= l: return self.np_net_cash[self.n_games-n:]
+        else: return np.nan
     
     @property
     def stats_df(self) -> pd.DataFrame:
-        def color_red_green_nums(val):
-            if type(val) == str:
-                color = ''
-                try:
-                    val = float(val)
-                    if val < 0: color = 'red'
-                    elif val > 0: color = 'green'
-                    return 'background-color: %s' % color
-                except:
-                    return 'background-color: %s' % color
-        
         data = [
-            ["No, Games", '{0:.0f}'.format(self.n_games)],
-            ["Avg. Weekly Net (£GBP)", '{0:.2f}'.format(self.avg_net_cash)],
-            ["Biggest Win (£GBP)", '{0:.2f}'.format(np.max(self.np_net_cash))],
-            ["Biggest Loss (£GBP)", '{0:.2f}'.format(np.min(self.np_net_cash))],
+            ["No. Games", '{0:.0f}'.format(self.n_games)],
+            ["No. Wins", '{0:.0f}'.format(self.n_wins)],
+            ["No. Losses", '{0:.0f}'.format(self.n_losses)],
+            ["First Game", f'{self.dates[0]}'],
+            ["Most Recent Game", f'{self.dates[-1]}']
         ]
         
         df = pd.DataFrame(data, columns=['Stat', 'Value'])
         df = df.set_index(df.columns[0])
+        #s = df.style.applymap(color_red_green_nums)
+        
+        return df
+    
+    @property
+    def net_cash_df(self) -> pd.DataFrame:
+        data = [
+            ["Avg. Weekly Net (AWN)", '{0:.2f}'.format(self.avg_net_cash)],
+            ["Biggest Win", '{0:.2f}'.format(np.max(self.np_net_cash))],
+            ["Biggest Loss", '{0:.2f}'.format(np.min(self.np_net_cash))],
+            ["AWN Winning", '{0:.2f}'.format(self.avg_win)],
+            ["AWN Lossing", '{0:.2f}'.format(self.avg_loss)],
+            ["AWN w/ Extra Buy-Ins", '{0:.2f}'.format(self.avg_net_w_multi_buyin)],
+            ["AWN Last 3 Games", '{0:.2f}'.format(np.average(self.net_last_n_games(n=3)))],
+            ["AWN Last 5 Games", '{0:.2f}'.format(np.average(self.net_last_n_games(n=5)))],
+            ["AWN Last 8 Games", '{0:.2f}'.format(np.average(self.net_last_n_games(n=8)))],
+        ]
+        
+        df = pd.DataFrame(data, columns=['Weekly Net', 'Cash (£GBP)'])
+        df = df.set_index(df.columns[0])
         s = df.style.applymap(color_red_green_nums)
         
         return s
+
 
 @dataclass
 class PlayerGroup:
