@@ -3,7 +3,6 @@ from src.collection import get_sheet
 from src.processing import get_games, get_game_group, get_players, get_player_group
 from src.streamlit import make_gui
 
-
 # Load environment variables
 with open("config.toml", "rb") as f:
     config = tomli.load(f)
@@ -30,11 +29,13 @@ def main():
     # Make the Guests and Regulars PlayerGroups for tab:
     # A 'Guest' is defined as being someone who has
     # played less than 4 games.
-    # guests = []
-    # regulars = []
-    # for player in players:
-    #     if player.n_games < 4: 
-    #         pass
+    guests = []
+    regulars = []
+    for player in players:
+        if player.n_games < 4: 
+            guests.append(player)
+        else:
+            regulars.append(player)
     
     # Make Player groups based on the player.group attributes
     # groups = []
@@ -42,18 +43,19 @@ def main():
     #     if not player.group == 'SOLO':
     #         if player.group in groups:
     #             pass
-         
-    # Make Past N Game Averages
-    # for 
     
     # Make Overall GameGroup Object
     # aggregate = get_game_group(games)
     
-    make_gui(logs_df, players, games)
-    
-    
-    
-    
-    
+    # Front-End
+    make_gui(
+        df=logs_df,
+        players=players,
+        games=games,
+        guests=guests,
+        regulars=regulars,
+    )
+
+
 if __name__=="__main__":
     main()

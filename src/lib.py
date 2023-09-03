@@ -1,7 +1,7 @@
 import numpy as np
 
 def color_red_green_nums(val):
-    if type(val) == str:
+    if type(val) in (str, float):
         color = ''
         try:
             val = float(val)
