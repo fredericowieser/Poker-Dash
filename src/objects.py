@@ -160,7 +160,8 @@ class Player:
             ["No. Wins", '{0:.0f}'.format(self.n_wins)],
             ["No. Losses", '{0:.0f}'.format(self.n_losses)],
             ["First Game", f'{self.dates[0]}'],
-            ["Most Recent Game", f'{self.dates[-1]}']
+            ["Most Recent Game", f'{self.dates[-1]}'],
+            ["Avg. No. Buy-Ins", '{0:.2f}'.format(self.avg_n_buyins)],
         ]
         
         df = pd.DataFrame(data, columns=['Stat', 'Value'])
@@ -174,6 +175,7 @@ class Player:
         data = [
             ["Current Net", '{0:.2f}'.format(float(self.current_net))],
             ["Avg. Weekly Net (AWN)", '{0:.2f}'.format(self.avg_net_cash)],
+            ["St.Dev. Weekly Net", '{0:.2f}'.format(self.std_dev_net_cash)],
             ["Biggest Win", '{0:.2f}'.format(np.max(self.np_net_cash))],
             ["Biggest Loss", '{0:.2f}'.format(np.min(self.np_net_cash))],
             ["AWN Winning", '{0:.2f}'.format(self.avg_win)],

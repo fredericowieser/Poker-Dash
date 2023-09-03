@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import plotly
 import plotly.express as px
 import plotly.graph_objects as go
-
+import random
 
 def make_gui(df, players, games, guests, regulars):
     st.set_page_config(layout="wide")
@@ -76,9 +76,7 @@ def home_page(players, guests, regulars):
             player.avg_n_buyins,
             player.invested_cash
         ])
-    
-    #data = data.to_numpy()    
-        
+            
     all_time_net_df = pd.DataFrame(data, columns=[
         'Weekly Net',
         'Cash (£GBP)',
@@ -88,12 +86,9 @@ def home_page(players, guests, regulars):
         'Invested',
     ])
     all_time_net_df = all_time_net_df.set_index(all_time_net_df.columns[0])
-    
-    # TODO: Fix sorting
     all_time_net_df = all_time_net_df.sort_values(by=['Cash (£GBP)'], ascending=False)
     
-    # Display values with 2dp
-    
+    # Todo: Display values with 2dp    
     for i in range(len(all_time_net_df['Cash (£GBP)'])):
         all_time_net_df['Cash (£GBP)'][i] = round(
             all_time_net_df['Cash (£GBP)'][i].tolist(),
@@ -101,9 +96,8 @@ def home_page(players, guests, regulars):
         )
         
     all_time_net_df = all_time_net_df.style.applymap(color_red_green_nums)
-    
     st.dataframe(all_time_net_df, use_container_width=True, height=37*len(players))
-    
+
     
     # Rules and Info
     st.title('Information')
@@ -127,7 +121,7 @@ def players_page(players):
         option = st.selectbox(
             'Which player to you want to see?',
             (player.name for player in players),
-            key=f"{key}"
+            key=f"{key}",
         )
         for i in range(l):
             if option == players[i].name:
@@ -155,7 +149,7 @@ def games_page(games):
         option = st.selectbox(
             'Which game to you want to see?',
             (game.datestr for game in games),
-            key=f"{key}"
+            key=f"{key}",
         )
         for i in range(l):
             if option == games[i].datestr:
