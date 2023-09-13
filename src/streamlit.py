@@ -179,7 +179,7 @@ def ratings_page(ratings_arr):
     for i in range(n_games):
         dates =[]
         player = names[i]
-        if(player == 'date' or n_player_games[player] < 5): continue
+        if(player == 'date' or n_player_games[player] < 4): continue
         running_rating = []
         for j in range(n_games):
             dates.append(ratings[j]["date"])
