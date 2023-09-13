@@ -172,19 +172,13 @@ def ratings_page(ratings_arr):
     # Main Plot of Regulae
     plt.style.use('dark_background')
     fig, ax = plt.subplots()
-    ratings, n_player_games = ratings_arr
-    n_games = len(ratings)
-    names = list(ratings[0].keys())
+    n_games = len(ratings_arr)
 
     for i in range(n_games):
-        dates =[]
-        player = names[i]
-        if(player == 'date' or n_player_games[player] < 4): continue
-        running_rating = []
-        for j in range(n_games):
-            dates.append(ratings[j]["date"])
-            running_rating.append(ratings[j][player])
-        ax.plot(dates, running_rating, 'o-', label=f'{player}')
+        player = ratings_arr[i]
+        if(player.n_games < 5): continue
+        
+        ax.plot(player.rating_data_date, player.rating_data_rating, 'o-', label=f'{player.name}')
 
     
     # TODO: Add more advanced lengeding with this 
