@@ -192,6 +192,35 @@ class Player:
         
         return df
 
+class PlayerRating:
+    def __init__(self, name):
+        self.name = name
+        self.rating_data_date = []
+        self.rating_data_rating = []
+        self.n_games = 0
+    
+    def new_game(self, date, net):
+        self.n_games +=1
+        self.new_game_data_date = date
+        self.new_game_data_rating = self.current_rating()
+        self.new_game_data_net = net
+    
+    def current_rating(self):
+        return self.rating_data_rating[-1] if len(self.rating_data_rating) > 0 else 1000
+    
+    def set_new_rating(self):
+        self.rating_data_date.append(self.new_game_data_date)
+        self.rating_data_rating.append(self.new_game_data_rating)
+
+class GameRating:
+    def __init__(self, player, player_rating):
+        self.name = player[0]
+        self.net = self.calc_player_net(player)
+        self.player_rating = player_rating
+    
+    def calc_player_net(_,player):
+        buy_ins, end_game, base_chips, chip_value = player[-4:]
+        return round(chip_value * (end_game - (base_chips * buy_ins)), 2)
 
 @dataclass
 class PlayerGroup:

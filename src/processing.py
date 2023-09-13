@@ -1,8 +1,8 @@
 import datetime
 import numpy as np
 import pandas as pd
-from src.objects import Game, Player, PlayerGroup, GameGroup
-from src.rating import get_rating_arr_for_game, get_game_rating, PlayerRating
+from src.objects import Game, Player, PlayerGroup, GameGroup, PlayerRating
+from src.rating import get_rating_arr_for_game, get_game_rating
 from typing import List
 
 

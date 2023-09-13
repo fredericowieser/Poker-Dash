@@ -1,35 +1,5 @@
-import datetime
 import numpy as np
-
-class PlayerRating:
-    def __init__(self, name):
-        self.name = name
-        self.rating_data_date = [datetime.date(2023, 2, 8)]
-        self.rating_data_rating = [1000]
-        self.n_games = 0
-    
-    def new_game(self, date, net):
-        self.n_games +=1
-        self.new_game_data_date = date
-        self.new_game_data_rating = self.current_rating()
-        self.new_game_data_net = net
-    
-    def current_rating(self):
-        return self.rating_data_rating[-1]
-    
-    def set_new_rating(self):
-        self.rating_data_date.append(self.new_game_data_date)
-        self.rating_data_rating.append(self.new_game_data_rating)
-
-class GameRating:
-    def __init__(self, player, player_rating):
-        self.name = player[0]
-        self.net = self.calc_player_net(player)
-        self.player_rating = player_rating
-    
-    def calc_player_net(_,player):
-        buy_ins, end_game, base_chips, chip_value = player[-4:]
-        return round(chip_value * (end_game - (base_chips * buy_ins)), 2)
+from src.objects import GameRating
 
 def get_rating_arr_for_game(game: np.ndarray, player_ratings):
     n_players = len(game)
@@ -39,7 +9,7 @@ def get_rating_arr_for_game(game: np.ndarray, player_ratings):
         name = player[0]
         player_rating = get_player_rating_from_name(player_ratings, name)
         rating_arr.append(GameRating(player, player_rating))
-        
+
     return rating_arr
 
 def get_player_rating_from_name(ratings, name):
