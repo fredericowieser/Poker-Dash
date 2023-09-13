@@ -8,7 +8,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import random
 
-def make_gui(df, players, games, guests, regulars):
+def make_gui(df, players, games, guests, regulars, player_ratings):
     st.set_page_config(layout="wide")
     
     # Side Bar
@@ -19,6 +19,7 @@ def make_gui(df, players, games, guests, regulars):
     if mode == "Home": home_page(players, guests, regulars)
     if mode == "Players": players_page(players)
     if mode == "Games": games_page(games)
+    if mode == "GELO": ratings_page(player_ratings)
     
     
 def make_sidebar():
@@ -28,6 +29,7 @@ def make_sidebar():
             "Home",
             "Players",
             "Games",
+            "GELO"
             #TODO: "Player Groups",
             #TODO: "Running Aggregates",
             
@@ -166,4 +168,30 @@ def games_page(games):
     with col2:
         make_game_info_card(games, 2)
 
-        
+def ratings_page(ratings_arr):
+    # Main Plot of Regulae
+    plt.style.use('dark_background')
+    fig, ax = plt.subplots()
+    ratings, n_player_games = ratings_arr
+    n_games = len(ratings)
+    names = list(ratings[0].keys())
+
+    for i in range(n_games):
+        dates =[]
+        player = names[i]
+        if(player == 'date' or n_player_games[player] < 5): continue
+        running_rating = []
+        for j in range(n_games):
+            dates.append(ratings[j]["date"])
+            running_rating.append(ratings[j][player])
+        ax.plot(dates, running_rating, 'o-', label=f'{player}')
+
+    
+    # TODO: Add more advanced lengeding with this 
+    # https://python-graph-gallery.com/web-line-chart-with-labels-at-line-end/
+    ax.set_xlabel('Date')  # Add an x-label to the axes.
+    ax.set_ylabel('Weekly Net Cash (£GBP)')  # Add a y-label to the axes.
+    ax.set_title('Running Net for All Regular Players')  # Add a title to the axes.
+    ax.legend(bbox_to_anchor=(1.1, 1.05))
+    ax.grid()
+    st.pyplot(fig)
