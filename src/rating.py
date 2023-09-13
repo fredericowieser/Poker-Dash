@@ -38,7 +38,7 @@ def get_game_rating(game_players: np.ndarray, current_ratings, game_numbers, dat
             rating_sum += calc_comp_rating_sum(net_diff, pot_total, player, comp_player, comp_player_games)
 
         player_game_multi = (n_player_games+1)/(n_player_games+2)
-        game_player["new_rating"] = player + (20-n_players) * rating_sum * player_game_multi
+        game_player["new_rating"] = player + (40-n_players) * rating_sum * player_game_multi
     return get_all_new_ratings(current_ratings,game_players,game_numbers,date)
 
 def calc_pot_total(game: np.ndarray):
@@ -54,7 +54,7 @@ def calc_comp_rating_sum(net, pot, player, competitor, n_competitor_games):
     comp_game_multi = (n_competitor_games+1)/(n_competitor_games+2)
     elo_equation = (s_value - 1/(1+10**((competitor-player)/1000)))
 
-    return margin * comp_game_multi * elo_equation
+    return (margin) * (comp_game_multi) * (elo_equation)
 
 def calc_s_winner_loser_values(net, player, competitor):
     if (net > 0): return 1, player, competitor
@@ -63,7 +63,7 @@ def calc_s_winner_loser_values(net, player, competitor):
     
 
 def margin_of_victory_multiplier(net, pot, winner, loser):
-    return (np.log(abs(net/pot) + 1)*(5.2/((winner-loser)*0.0005+5.2)))     
+    return (np.log(abs(net/pot) + 1)*(4.4/((winner-loser)*0.001+4.4)))     
 
 def get_all_new_ratings(current, game_players, n_games, date):
     new_ratings = copy.deepcopy(current)
