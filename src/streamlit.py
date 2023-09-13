@@ -190,8 +190,8 @@ def ratings_page(ratings_arr):
     # TODO: Add more advanced lengeding with this 
     # https://python-graph-gallery.com/web-line-chart-with-labels-at-line-end/
     ax.set_xlabel('Date')  # Add an x-label to the axes.
-    ax.set_ylabel('Weekly Net Cash (£GBP)')  # Add a y-label to the axes.
-    ax.set_title('Running Net for All Regular Players')  # Add a title to the axes.
+    ax.set_ylabel('GELO rating')  # Add a y-label to the axes.
+    ax.set_title('Running GELO ratings for players with >4 games')  # Add a title to the axes.
     ax.legend(bbox_to_anchor=(1.1, 1.05))
     ax.grid()
     st.pyplot(fig)
