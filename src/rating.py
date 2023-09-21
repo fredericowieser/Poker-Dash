@@ -39,8 +39,7 @@ def get_game_rating(game_players: np.ndarray, date):
             net_diff = player.new_game_data_net - comp_player.new_game_data_net
             rating_sum += calc_comp_rating_sum(net_diff, pot_total, player, comp_player)
 
-        player_game_multi = (player.n_games)/(player.n_games+1)
-        player.new_game_data_rating = player.current_rating() + (40-n_players) * rating_sum * player_game_multi
+        player.new_game_data_rating = player.current_rating() + (50/(n_players-1)) * rating_sum
 
     for player in game_players:
         player.player_rating.set_new_rating()
@@ -56,9 +55,9 @@ def calc_comp_rating_sum(net, pot, player, competitor):
 
     margin = margin_of_victory_multiplier(net, pot, winner_rating, loser_rating)
     comp_game_multi = (competitor.n_games)/(competitor.n_games+1)
-    elo_equation = (s_value - 1/(1+10**((competitor.current_rating()-player.current_rating())/1000)))
+    elo_equation = (s_value - 1/(1+10**((competitor.current_rating()-player.current_rating())/400)))
 
-    return (margin) * (comp_game_multi) * (elo_equation)
+    return (margin)  * (elo_equation)
 
 def calc_s_winner_loser_values(net, player, competitor):
     if (net > 0): return 1, player.current_rating(), competitor.current_rating()
@@ -67,4 +66,4 @@ def calc_s_winner_loser_values(net, player, competitor):
     
 
 def margin_of_victory_multiplier(net, pot, winner, loser):
-    return (np.log(abs(net/pot) + 1)*(4.4/((winner-loser)*0.001+4.4)))     
+    return (np.log(abs(net/pot) + 1)*(2.2/((winner-loser)*0.001+2.2)))     
