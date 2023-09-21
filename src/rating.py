@@ -54,7 +54,6 @@ def calc_comp_rating_sum(net, pot, player, competitor):
     s_value, winner_rating, loser_rating = calc_s_winner_loser_values(net, player, competitor)
 
     margin = margin_of_victory_multiplier(net, pot, winner_rating, loser_rating)
-    comp_game_multi = (competitor.n_games)/(competitor.n_games+1)
     elo_equation = (s_value - 1/(1+10**((competitor.current_rating()-player.current_rating())/400)))
 
     return (margin)  * (elo_equation)
