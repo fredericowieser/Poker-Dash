@@ -48,7 +48,7 @@ def make_sidebar():
 def home_page(players, guests, regulars):
     # Title + Intro
     st.title('Poker Dashboard')
-    st.markdown('This is a web app to allow exploration of our weekly Poker games, I hope you enjoy!')
+    st.markdown('This web app allows you to explore our weekly Poker games. We hope you enjoy!')
     
     # Main Plot of Regulae
     plt.style.use('dark_background')
@@ -103,11 +103,11 @@ def home_page(players, guests, regulars):
     st.title('Information')
     st.markdown(
         """
-        - When speaking about regular and guest players we mean players who have played more the 3 games and those with 3 and under.
+        - Players are considered 'Regular' if they have played more than 3 games, or a 'Guest' if they have played 3 games or lower
         
-        - Everyone starts with the same amount of money,
+        - Everyone starts with the same amount of money - the buy in limit (£5)
         
-        - If you lose all your money you can buyin upto the same amount you started with.
+        - If you lose all your money you can buy in up to the buy in limit
         
         """
     )
