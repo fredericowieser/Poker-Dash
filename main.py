@@ -25,16 +25,10 @@ def main():
     games = get_games(logs_np)
     players = get_players(logs_np)
     player_ratings = get_player_ratings(logs_np)
+    
     # Make the Guests and Regulars PlayerGroups for tab:
     # A 'Guest' is defined as being someone who has
     # played less than 4 games.
-    guests = []
-    regulars = []
-    for player in players:
-        if player.n_games < 4: 
-            guests.append(player)
-        else:
-            regulars.append(player)
     
     # Make Player groups based on the player.group attributes
     # groups = []
@@ -51,8 +45,6 @@ def main():
         df=logs_df,
         players=players,
         games=games,
-        guests=guests,
-        regulars=regulars,
         player_ratings=player_ratings,
     )
 

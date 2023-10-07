@@ -13,7 +13,7 @@ With the hope in the future that we will implement some possiblt prediction feat
  - [x] Convert all graphing to matplotlib and only use numpy for calculations.
  - [x] All objects only use numpy for their definitions.
  - [x] Figure out way to convert Dates to Game numbers and have a hash table for this
- - [ ] Create interface with sidebar as follows being the maind tabs
+ - [ ] Create interface with sidebar as follows being the main tabs
    - [x] Home, where you select the timeline you want to look at and then have the running total graph aswell as the main leaderboard with conditional formatting, as well as the Player group leaderboard.
    - [x] Players, where we have a checkbox and can then see individual player stats and and history as well as some of the more indepth values (e.g. likelihood of return on the second/third buy in)
    - [ ] Groups of Players, this is the same as players except we look at the group.
@@ -21,3 +21,8 @@ With the hope in the future that we will implement some possiblt prediction feat
      - [ ] Some of the default Player Groups would be The Regulars which would be some number of games or more have to be played to be in. The guests which is the same but on the other side of that number.
    - [x] Games, individual Games from the timeline selected at the main tab.
    - [x] Comparison, between players and or playersgroups with a graph showing those two objects with the current average of all players
+
+# Features To Add
+- [Treemaps in matplotlib with squarify | PYTHON CHARTS](https://python-charts.com/part-whole/treemap-matplotlib/)
+- [Make Dataframes Interactive in Streamlit | by My Data Talk | Towards Data Science](https://towardsdatascience.com/make-dataframes-interactive-in-streamlit-c3d0c4f84ccb)
+- 

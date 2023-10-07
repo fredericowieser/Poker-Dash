@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 from src.lib import avg_gbp_in_per_cap, color_red_green_nums
+from src.colorhash import ColorHash
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -130,6 +131,11 @@ class Player:
             rolling_cash[i] = (
                 rolling_cash[i-1] + self.np_net_cash[i]
             )
+            
+        # Create Max/Min Running Net
+        self.max_rn = np.max(rolling_cash)
+        self.min_rn = np.min(rolling_cash)
+            
         return rolling_cash
     
     @property
@@ -192,6 +198,18 @@ class Player:
         
         return df
 
+    @property
+    def color(self) -> str:
+        chex = ColorHash(self.name).hex
+        crgb = ( int(chex[1:3], 16), int(chex[3:5], 16), int(chex[5:], 16) )
+        crgb_anti = ( abs(crgb[i]-255) for i in range(len(crgb)) )
+        chex_anti = '#%02x%02x%02x' % tuple(crgb_anti)
+        
+        if sum(crgb) % 2 == 0:
+            return chex
+        else:
+            return chex_anti
+        
 class PlayerRating:
     def __init__(self, name):
         self.name = name
