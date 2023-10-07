@@ -1,6 +1,8 @@
+import datetime
 import numpy as np
 import pandas as pd
-from src.objects import Game, Player, PlayerGroup, GameGroup
+from src.objects import Game, Player, PlayerGroup, GameGroup, PlayerRating
+from src.rating import get_rating_arr_for_game, get_game_rating
 from typing import List
 
 
@@ -67,7 +69,26 @@ def get_players(logs: np.ndarray) -> List[Player]:
     
     return player_objs
 
+def get_player_ratings(logs: np.ndarray):
+    player_ratings = []
+    game_names = np.unique(logs[:,0])
+    n_players = len(game_names)
+    for i in range(n_players):
+        player_ratings.append(PlayerRating(game_names[i]))
     
+    game_dates = np.unique(logs[:,1])
+    n_games = len(game_dates)
+    n_rows = len(logs)
+    
+    for i in range(n_games):
+        tmp_game_log = [] # [{name, net}]
+        for j in range(n_rows):
+            if logs[j,1] == game_dates[i]: tmp_game_log.append(logs[j]) 
+        rating_arr = get_rating_arr_for_game(tmp_game_log, player_ratings)
+        get_game_rating(rating_arr, game_dates[i])
+    return player_ratings
+    
+
 def get_player_group(players: List[Player]):
     """_summary_
 

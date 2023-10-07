@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 from src.lib import avg_gbp_in_per_cap, color_red_green_nums
+from src.colorhash import ColorHash
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -130,6 +131,11 @@ class Player:
             rolling_cash[i] = (
                 rolling_cash[i-1] + self.np_net_cash[i]
             )
+            
+        # Create Max/Min Running Net
+        self.max_rn = np.max(rolling_cash)
+        self.min_rn = np.min(rolling_cash)
+            
         return rolling_cash
     
     @property
@@ -192,6 +198,47 @@ class Player:
         
         return df
 
+    @property
+    def color(self) -> str:
+        chex = ColorHash(self.name).hex
+        crgb = ( int(chex[1:3], 16), int(chex[3:5], 16), int(chex[5:], 16) )
+        crgb_anti = ( abs(crgb[i]-255) for i in range(len(crgb)) )
+        chex_anti = '#%02x%02x%02x' % tuple(crgb_anti)
+        
+        if sum(crgb) % 2 == 0:
+            return chex
+        else:
+            return chex_anti
+        
+class PlayerRating:
+    def __init__(self, name):
+        self.name = name
+        self.rating_data_date = []
+        self.rating_data_rating = []
+        self.n_games = 0
+    
+    def new_game(self, date, net):
+        self.n_games +=1
+        self.new_game_data_date = date
+        self.new_game_data_rating = self.current_rating()
+        self.new_game_data_net = net
+    
+    def current_rating(self):
+        return self.rating_data_rating[-1] if len(self.rating_data_rating) > 0 else 1000
+    
+    def set_new_rating(self):
+        self.rating_data_date.append(self.new_game_data_date)
+        self.rating_data_rating.append(self.new_game_data_rating)
+
+class GameRating:
+    def __init__(self, player, player_rating):
+        self.name = player[0]
+        self.net = self.calc_player_net(player)
+        self.player_rating = player_rating
+    
+    def calc_player_net(_,player):
+        buy_ins, end_game, base_chips, chip_value = player[-4:]
+        return round(chip_value * (end_game - (base_chips * buy_ins)), 2)
 
 @dataclass
 class PlayerGroup:

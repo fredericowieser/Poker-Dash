@@ -1,6 +1,6 @@
 import tomli
 from src.collection import get_sheet
-from src.processing import get_games, get_game_group, get_players, get_player_group
+from src.processing import get_games, get_game_group, get_players, get_player_ratings, get_player_group
 from src.streamlit import make_gui
 
 # Load environment variables
@@ -13,7 +13,6 @@ def main():
     LOG_SHEET_NAME = config.get('LOG_SHEET_NAME')
     
     logs_df = get_sheet(SHEETS_ID, LOG_SHEET_NAME)
-    
     # Numpy Log Index for logs_np:
     # - logs[:,0] -> Name
     # - logs[:,1] -> Date
@@ -25,17 +24,11 @@ def main():
     logs_np = logs_df.to_numpy()
     games = get_games(logs_np)
     players = get_players(logs_np)
+    player_ratings = get_player_ratings(logs_np)
     
     # Make the Guests and Regulars PlayerGroups for tab:
     # A 'Guest' is defined as being someone who has
     # played less than 4 games.
-    guests = []
-    regulars = []
-    for player in players:
-        if player.n_games < 4: 
-            guests.append(player)
-        else:
-            regulars.append(player)
     
     # Make Player groups based on the player.group attributes
     # groups = []
@@ -52,8 +45,7 @@ def main():
         df=logs_df,
         players=players,
         games=games,
-        guests=guests,
-        regulars=regulars,
+        player_ratings=player_ratings,
     )
 
 
