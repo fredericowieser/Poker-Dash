@@ -66,7 +66,7 @@ def home_page(players, end_date, total_n_games):
     selected_n_games = st.select_slider(
         'Select how many games the players shown have played:',
         options=range(total_n_games),
-        value=total_n_games/2,
+        value=round(total_n_games/2),
     )
     
     selected_players = []

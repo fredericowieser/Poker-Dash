@@ -13,6 +13,8 @@ This website features a statistical visualistion of the results of our ongoing p
 ### Current Features
    - Home
       - graph showing the running totals; users can alter the time range and min number of games played
+	      - This graph uses the following repo for a hashing function from a player's name to a unique colour:
+	        [GitHub - dimostenis/color-hash-python: Generate deterministic color from any object](https://github.com/dimostenis/color-hash-python/tree/main)
       - player's leaderboard, featuring conditional formatting
    - Compare Players
       - users select players to analyse and compare stats, with the option of default player groups:

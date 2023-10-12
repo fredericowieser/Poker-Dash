@@ -17,6 +17,7 @@ tomli = "^2.0.1"
 streamlit-option-menu = "^0.3.6"
 ipdb = "^0.13.13"
 mpld3 = "^0.5.9"
+notebook = "^7.0.4"
 
 
 
