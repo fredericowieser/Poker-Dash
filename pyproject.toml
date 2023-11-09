@@ -18,6 +18,9 @@ streamlit-option-menu = "^0.3.6"
 ipdb = "^0.13.13"
 mpld3 = "^0.5.9"
 notebook = "^7.0.4"
+ipython = "^8.16.1"
+ipympl = "^0.9.3"
+ipykernel = "^6.26.0"
 
 
 

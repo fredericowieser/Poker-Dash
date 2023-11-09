@@ -66,7 +66,7 @@ def home_page(players, end_date, total_n_games):
     selected_n_games = st.select_slider(
         'Select how many games the players shown have played:',
         options=range(total_n_games),
-        value=round(total_n_games/2),
+        value=round(total_n_games**(1/2)),
     )
     
     selected_players = []
@@ -75,31 +75,6 @@ def home_page(players, end_date, total_n_games):
     
     fig = make_main_page_graph(selected_players, end_date, selected_n_games)
     st.pyplot(fig)
-    
-    # # Plotly: Main Plot of Regulars
-    # fig = go.Figure()
-    
-    # for player in regulars:
-    #     fig.add_trace(go.Scatter(
-    #         x=player.dates,
-    #         y=player.running_net,
-    #         mode='lines+markers',
-    #         name=player.name,
-    #     ))
-    
-    # # TODO: Add more advanced lengeding with this 
-    # # https://python-graph-gallery.com/web-line-chart-with-labels-at-line-end/
-    # fig.update_layout(
-    #     title='Running Net for All Regular Players',
-    #     xaxis_title='Date',
-    #     yaxis_title='Net Cash (£GBP)'
-    # )
-    
-    # st.plotly_chart(
-    #     fig,
-    #     use_container_width=True,
-    #     theme=None,
-    # )
         
     # Main Rankings
     data = []
@@ -122,7 +97,10 @@ def home_page(players, end_date, total_n_games):
         'Invested',
     ])
     all_time_net_df = all_time_net_df.set_index(all_time_net_df.columns[0])
-    all_time_net_df = all_time_net_df.sort_values(by=['Cash (£GBP)'], ascending=False)
+    all_time_net_df = all_time_net_df.sort_values(
+        by=['Cash (£GBP)'],
+        ascending=False,
+    )
     
     # Todo: Display values with 2dp    
     for i in range(len(all_time_net_df['Cash (£GBP)'])):
@@ -130,10 +108,17 @@ def home_page(players, end_date, total_n_games):
             all_time_net_df['Cash (£GBP)'][i].tolist(),
             2,
         )
-        
-    all_time_net_df = all_time_net_df.style.applymap(color_red_green_nums)
+
     st.title('Leaderboard')
-    st.dataframe(all_time_net_df, use_container_width=True, height=39*len(selected_players))
+    st.dataframe(
+        all_time_net_df.style.format(
+            subset=['Cash (£GBP)', 'Avg. Buy-Ins', 'Invested'],
+            formatter="{:.2f}"
+        ).applymap(color_red_green_nums),
+        use_container_width=True,
+        height=39*len(selected_players)
+    )
+
 
     
     # Rules and Info
@@ -264,7 +249,7 @@ def make_main_page_graph(selected_players, end_date, selected_n_games):
             player.running_net,
             '-',
             label=f'{player.name}',
-            color=player.color,
+            c=player.color,
         )
     
     # TODO: Add more advanced lengeding with this 
@@ -321,8 +306,8 @@ def make_main_page_graph(selected_players, end_date, selected_n_games):
         plt.plot(
             [x_start, x_mid, x_end], 
             [y_start, y_mid, y_end], 
-            color=player.color, 
-            alpha=0.75, 
+            color='white', 
+            alpha=0.4, 
             ls="dashed"
         )
         
@@ -331,7 +316,7 @@ def make_main_page_graph(selected_players, end_date, selected_n_games):
             x_end, 
             y_end, 
             player.name, 
-            color=player.color, 
+            c=player.color, 
             fontsize=12, 
             weight="bold",
             va="center",

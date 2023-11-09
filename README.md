@@ -9,6 +9,9 @@ This website features a statistical visualistion of the results of our ongoing p
 - Historical data interface to allow for broader queries of the data
 - Combined graphs and tables on the Compare Player and Games tabs 
 - Machine Learning based feature to predict player returns when the model is provided with a group of opponents
+	- Some possible sources of data
+		- [Poker Hand Histories and datamining | HHSmithy.com](https://www.hhsmithy.com/)
+		- [SharkScope - Online and Live Poker Statistics](https://www.sharkscope.com/)
 
 ### Current Features
    - Home
@@ -30,3 +33,6 @@ This website features a statistical visualistion of the results of our ongoing p
  - Pandas have been used to create NumPy arrays and hash tables, then used to create the main objects
  - Graphing is achieved by Matplotlib and calculations with NumPy
  - Objects use NumPy for their definitions
+
+# References
+- [Official Texas Hold’em Poker Rules - Primedope](https://www.primedope.com/official-texas-holdem-poker-rules/)
