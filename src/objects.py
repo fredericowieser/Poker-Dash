@@ -1,14 +1,14 @@
-from dataclasses import dataclass
-from typing import List
-from src.lib import avg_gbp_in_per_cap, color_red_green_nums
-from src.colorhash import ColorHash
-from src.lib import encode_str_2_rgb
-import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
-
 # import squarify
 import datetime
+from dataclasses import dataclass
+from typing import List
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+from src.colorhash import ColorHash
+from src.lib import avg_gbp_in_per_cap, color_red_green_nums, encode_str_2_rgb
 
 # Graph Running Net vs Time vertical height
 Y_LIMS = 45
@@ -37,7 +37,6 @@ class Game:
             )
 
             # Change Date format
-
             self.datestr = datetime.datetime.strptime(
                 str(self.date), "%Y-%m-%d"
             ).strftime("%d %b %y")

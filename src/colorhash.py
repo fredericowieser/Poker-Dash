@@ -16,11 +16,7 @@ Quick start:
 '#2dd24b'
 """
 from binascii import crc32
-from typing import Any
-from typing import Optional
-from typing import Sequence
-from typing import Tuple
-from typing import Union
+from typing import Any, Optional, Sequence, Tuple, Union
 
 MIN_HUE = 0
 MAX_HUE = 360

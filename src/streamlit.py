@@ -1,17 +1,19 @@
-from src.lib import color_red_green_nums
-import streamlit as st
-from streamlit_option_menu import option_menu
+import datetime
+import random
+from math import ceil, floor
+
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-from matplotlib.dates import DateFormatter
 import plotly
 import plotly.express as px
 import plotly.graph_objects as go
-import random
+from matplotlib.dates import DateFormatter
+from streamlit_option_menu import option_menu
+
+import streamlit as st
 import streamlit.components.v1 as components
-import datetime
-from math import ceil, floor
+from src.lib import color_red_green_nums
 
 
 def make_gui(df, players, games, player_ratings):

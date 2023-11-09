@@ -1,5 +1,6 @@
-import pandas as pd
 from datetime import date
+
+import pandas as pd
 
 
 def col_gbp_to_float(df: pd.DataFrame, col_name: str) -> pd.DataFrame:

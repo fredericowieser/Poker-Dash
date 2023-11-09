@@ -1,9 +1,11 @@
 import datetime
+from typing import List
+
 import numpy as np
 import pandas as pd
-from src.objects import Game, Player, PlayerGroup, GameGroup, PlayerRating
-from src.rating import get_rating_arr_for_game, get_game_rating
-from typing import List
+
+from src.objects import Game, GameGroup, Player, PlayerGroup, PlayerRating
+from src.rating import get_game_rating, get_rating_arr_for_game
 
 
 def get_games(logs: np.ndarray) -> List[Game]:
