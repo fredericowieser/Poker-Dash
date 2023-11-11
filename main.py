@@ -1,8 +1,13 @@
 import tomli
 
 from src.collection import get_sheet
-from src.processing import (get_game_group, get_games, get_player_group,
-                            get_player_ratings, get_players)
+from src.processing import (
+    get_game_group,
+    get_games,
+    get_player_group,
+    get_player_ratings,
+    get_players
+)
 from src.streamlit import make_gui
 
 # Load environment variables
