@@ -104,7 +104,9 @@ class Player:
             self.avg_loss: float = np.average(self.np_net_cash[(self.np_net_cash < 0)])
             self.n_wins: int = len(self.np_net_cash[(self.np_net_cash > 0)])
             self.n_losses: int = len(self.np_net_cash[(self.np_net_cash < 0)])
-            self.win_loss_ratio: dict = {"W": self.n_wins, "L": self.n_losses}
+            self.win_loss_ratio = (
+                self.n_wins/self.n_losses if self.n_losses else np.nan
+            )
             self.avg_n_buyins: float = np.average(self.logs[:, 2])
             self.std_dev_n_buyins: float = np.std(self.logs[:, 2])
             self.avg_net_w_multi_buyin: float = np.average(
