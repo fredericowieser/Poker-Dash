@@ -22,8 +22,14 @@ def home_page(players, end_date, total_n_games):
     for player in players:
         if player.n_games > selected_n_games:
             selected_players.append(player)
-    fig = make_main_page_graph(selected_players, end_date, selected_n_games)
-    st.pyplot(fig)
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        fig = make_main_page_graph(selected_players, end_date, selected_n_games)
+        st.pyplot(fig)
+    with col2:
+        fig = make_gelo_graph(selected_players, end_date, selected_n_games)
+        st.pyplot(fig)
 
     # Main Rankings
     data = []
@@ -32,6 +38,7 @@ def home_page(players, end_date, total_n_games):
             [
                 player.name,
                 player.current_net,
+                player.current_gelo,
                 player.n_games,
                 player.n_wins,
                 player.avg_n_buyins,
@@ -46,8 +53,9 @@ def home_page(players, end_date, total_n_games):
     all_time_net_df = pd.DataFrame(
         data,
         columns=[
-            "Weekly Net (WN)",
+            "Name",
             "Cash (£)",
+            "GELO",
             "No. Games",
             "Wins",
             "Avg. Buy-Ins",
@@ -55,7 +63,7 @@ def home_page(players, end_date, total_n_games):
             "Avg. WN (£)",
             "Std. Dev. WN (£)",
             "Avg. WN Last 3 Games (£)",
-            "Win-Loss Ratio"
+            "Win-Loss Ratio",
         ],
     )
     all_time_net_df = all_time_net_df.set_index(all_time_net_df.columns[0])
@@ -69,6 +77,7 @@ def home_page(players, end_date, total_n_games):
         all_time_net_df.style.format(
             subset=[
                 "Cash (£)",
+                "GELO",
                 "Avg. Buy-Ins",
                 "Invested (£)",
                 "Avg. WN (£)",
@@ -138,6 +147,83 @@ def make_main_page_graph(selected_players, end_date, selected_n_games):
         x_start = player.dates[-1]
         y_start = player.running_net[-1]
         y_mid = player.running_net[-1]
+
+        # Add line based on three points
+        plt.plot(
+            [x_start, x_mid, x_end],
+            [y_start, y_mid, y_end],
+            color="white",
+            alpha=0.4,
+            ls="dashed",
+        )
+
+        # Add Player name label
+        plt.text(
+            x_end,
+            y_end,
+            player.name,
+            c=player.color,
+            fontsize=12,
+            weight="bold",
+            va="center",
+        )
+
+        i += 1
+
+    fig.autofmt_xdate()
+
+    return fig
+
+def make_gelo_graph(selected_players, end_date, selected_n_games):
+    fig = plt.figure()
+
+    selected_players.sort(key=lambda x: x.current_gelo)
+
+    for player in selected_players:
+        plt.plot(
+            player.rating_data_date,
+            player.rating_data_rating,
+            "-",
+            label=f"{player.name}",
+            c=player.color,
+        )
+
+    plt.xlabel("Date")
+    plt.ylabel("GELO")
+    plt.title(
+        f"GELO for Selected Players (No. Games > {selected_n_games})"
+    )
+
+    plt.style.use("dark_background")
+    plt.grid(visible=True, alpha=0.25)
+
+    x_mid = end_date + datetime.timedelta(days=7)
+    x_end = end_date + datetime.timedelta(days=14)
+
+    tmp_max = 1000
+    tmp_min = 1000
+    for player in selected_players:
+        if tmp_max < player.max_rating:
+            tmp_max = player.max_rating
+        if tmp_min > player.min_rating:
+            tmp_min = player.min_rating
+
+    g = 1
+    MAX_RN = rnd(tmp_max, grain=g) 
+    MIN_RN = rnd(tmp_min, up=False, grain=g)
+
+    plt.ylim(MIN_RN - 1, MAX_RN + 1)
+
+    Y_ENDS = np.linspace(MIN_RN, MAX_RN, num=len(selected_players))
+
+    i = 0
+    for player in selected_players:
+        y_end = Y_ENDS[i]
+
+        # Create points for dashed line
+        x_start = player.rating_data_date[-1]
+        y_start = player.rating_data_rating[-1]
+        y_mid = player.rating_data_rating[-1]
 
         # Add line based on three points
         plt.plot(

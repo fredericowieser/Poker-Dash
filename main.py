@@ -2,10 +2,9 @@ import tomli
 
 from src.collection import get_sheet
 from src.processing import (
-    get_game_group,
+    # get_game_group,
     get_games,
-    get_player_group,
-    get_player_ratings,
+    # get_player_group,
     get_players
 )
 from src.streamlit import make_gui
@@ -31,7 +30,6 @@ def main():
     logs_np = logs_df.to_numpy()
     games = get_games(logs_np)
     players = get_players(logs_np)
-    player_ratings = get_player_ratings(logs_np)
 
     # Make the Guests and Regulars PlayerGroups for tab:
     # A 'Guest' is defined as being someone who has
@@ -52,7 +50,6 @@ def main():
         df=logs_df,
         players=players,
         games=games,
-        player_ratings=player_ratings,
     )
 
 

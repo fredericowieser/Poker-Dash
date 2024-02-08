@@ -10,13 +10,12 @@ from streamlit_option_menu import option_menu
 import streamlit as st
 # import streamlit.components.v1 as components
 from src.lib import color_red_green_nums
-from src.pages.elo import ratings_page
 from src.pages.home import home_page
 from src.pages.player_comparison import players_page
 from src.pages.game_comparison import games_page
 
 
-def make_gui(df, players, games, player_ratings):
+def make_gui(df, players, games):
     st.set_page_config(layout="wide")
 
     plt.rcParams["axes.spines.right"] = False
@@ -37,8 +36,6 @@ def make_gui(df, players, games, player_ratings):
         players_page(players)
     if mode == "Games":
         games_page(games)
-    if mode == "GELO":
-        ratings_page(player_ratings)
 
 
 def make_sidebar():
@@ -48,7 +45,6 @@ def make_sidebar():
             "Home",
             "Players",
             "Games",
-            "GELO"
             # TODO: "Player Groups",
             # TODO: "Running Aggregates",
         ],
@@ -56,7 +52,7 @@ def make_sidebar():
             "house",
             "person",
             "bullseye",
-            "people",
+            #"people",
             #'clock'
         ],
         menu_icon="app-indicator",

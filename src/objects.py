@@ -11,7 +11,7 @@ from src.colorhash import ColorHash
 from src.lib import avg_gbp_in_per_cap, color_red_green_nums, encode_str_2_rgb
 
 # Graph Running Net vs Time vertical height
-Y_LIMS = 45
+Y_LIMS = 60
 
 
 @dataclass
@@ -123,6 +123,13 @@ class Player:
                 self.n_buyins * self.points_in_buyins * self.value_of_points
             )
 
+            # GELO Stats
+            self.rating_data_date: List
+            self.rating_data_rating: List
+            self.max_rating: float
+            self.min_rating: float
+            self.current_gelo: float
+
     @property
     def running_net(self) -> np.ndarray:
         l = len(self.np_net_cash)
@@ -210,15 +217,6 @@ class Player:
 
     @property
     def color(self) -> str:
-        # chex = ColorHash(self.name).hex
-        # crgb = ( int(chex[1:3], 16), int(chex[3:5], 16), int(chex[5:], 16) )
-        # crgb_anti = ( abs(crgb[i]-255) for i in range(len(crgb)) )
-        # chex_anti = '#%02x%02x%02x' % tuple(crgb_anti)
-
-        # if sum(crgb) % 2 == 0:
-        #     return chex
-        # else:
-        #     return chex_anti
         return encode_str_2_rgb(self.name)
 
 

@@ -3,4 +3,4 @@ primaryColor="#0073e5"
 backgroundColor="#000000"
 secondaryBackgroundColor="#444444"
 textColor="#f5f5f5"
-font="hack"
+font='monospace'

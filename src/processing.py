@@ -75,6 +75,23 @@ def get_players(logs: np.ndarray) -> List[Player]:
                 name=player,
             )
         )
+    
+    # Create GELO Player Attribues
+    player_ratings = get_player_ratings(logs=logs)
+    for player_r in player_ratings:
+        for player in player_objs:
+            if player_r.name == player.name:
+                rating_data = player_r.rating_data_rating
+
+                player.rating_data_date = player_r.rating_data_date
+                player.rating_data_rating = rating_data
+
+                # Create Max/Min Rating
+                player.max_rating = np.max(rating_data)
+                player.min_rating = np.min(rating_data)
+
+                player.current_gelo = rating_data[-1]
+                continue
 
     return player_objs
 
@@ -100,19 +117,19 @@ def get_player_ratings(logs: np.ndarray):
     return player_ratings
 
 
-def get_player_group(players: List[Player]):
+def get_player_group(players: List[PlayerGroup]):
     """_summary_
 
     Args:
-        players (List[Player]): _description_
+        players (List[PlayerGroup]): _description_
     """
     pass
 
 
-def get_game_group(games: List[Game]):
+def get_game_group(games: List[GameGroup]):
     """_summary_
 
     Args:
-        games (List[Games]): _description_
+        games (List[GamesGroup]): _description_
     """
     pass
