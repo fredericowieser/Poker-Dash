@@ -218,6 +218,13 @@ class Player:
     @property
     def color(self) -> str:
         return encode_str_2_rgb(self.name)
+    
+    @property
+    def avg_net_last_n_games_array(self) -> np.ndarray:
+        arr = []
+        for i in range(self.n_games):
+            arr.append(np.average(self.net_last_n_games(i+1)))
+        return arr
 
 
 class PlayerRating:
