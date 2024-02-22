@@ -190,9 +190,10 @@ def make_2D_plot_on_players(df, c1: str, c2: str, selected_players: List, xax=Fa
     ])
 
     model.fit(x_np, y_np)  # perform linear regression
-    x_np = sorted(x_np)
-    y_pred = model.predict(x_np)  # make predictions
-    plt.plot(x_np, y_pred, color='pink')
+    x_np_sorted = sorted(x_np)
+    x_lin = np.linspace(x_np_sorted[0], x_np_sorted[-1])
+    y_pred = model.predict(x_lin)  # make predictions
+    plt.plot(x_lin, y_pred, color='pink')
 
     plt.xlabel(c1)
     plt.ylabel(c2)
