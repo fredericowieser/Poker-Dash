@@ -6,6 +6,8 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import mpld3
+import streamlit.components.v1 as components
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.pipeline import Pipeline
@@ -55,6 +57,7 @@ def home_page(players, end_date, total_n_games):
         "Avg. WN Last 5 Games (£)",
         "Avg. WN Last 8 Games (£)",
         "Win-Loss Ratio",
+        "Last Game",
     ]
     for player in selected_players:
         data.append(
@@ -72,6 +75,7 @@ def home_page(players, end_date, total_n_games):
                 np.average(player.net_last_n_games(5)),
                 np.average(player.net_last_n_games(8)),
                 player.win_loss_ratio,
+                player.dates[-1],
             ]
         )
 
@@ -124,7 +128,7 @@ def home_page(players, end_date, total_n_games):
     with col6:
         y = st.checkbox('Show x=0')
 
-
+    # all_time_net_df['Date'] = all_time_net_df['Date'].astype(str)
     scatter_fig = make_2D_plot_on_players(
         all_time_net_df,
         ax_x,
