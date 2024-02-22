@@ -33,11 +33,26 @@ def home_page(players, end_date, total_n_games):
         fig = make_gelo_graph(selected_players, end_date, selected_n_games)
         st.pyplot(fig)
 
-    # fig1 = make_an_last_n_games_graph(selected_players)
-    # st.pyplot(fig1)
+    #fig1 = make_an_last_n_games_graph(selected_players)
+    #st.pyplot(fig1)
 
     # Main Rankings
     data = []
+    COLUMNS = [
+        "Name",
+        "Cash (£)",
+        "GELO",
+        "No. Games",
+        "Wins",
+        "Avg. Buy-Ins",
+        "Invested (£)",
+        "Std. Dev. WN (£)",
+        "Avg. WN (£)",
+        "Avg. WN Last 3 Games (£)",
+        "Avg. WN Last 5 Games (£)",
+        "Avg. WN Last 8 Games (£)",
+        "Win-Loss Ratio",
+    ]
     for player in selected_players:
         data.append(
             [
@@ -59,21 +74,7 @@ def home_page(players, end_date, total_n_games):
 
     all_time_net_df = pd.DataFrame(
         data,
-        columns=[
-            "Name",
-            "Cash (£)",
-            "GELO",
-            "No. Games",
-            "Wins",
-            "Avg. Buy-Ins",
-            "Invested (£)",
-            "Std. Dev. WN (£)",
-            "Avg. WN (£)",
-            "Avg. WN Last 3 Games (£)",
-            "Avg. WN Last 5 Games (£)",
-            "Avg. WN Last 8 Games (£)",
-            "Win-Loss Ratio",
-        ],
+        columns=COLUMNS,
     )
     all_time_net_df = all_time_net_df.set_index(all_time_net_df.columns[0])
     all_time_net_df = all_time_net_df.sort_values(
@@ -99,6 +100,32 @@ def home_page(players, end_date, total_n_games):
         use_container_width=True,
         height=39*len(selected_players),
     )
+
+    st.title("Plot Creator")
+
+    # TODO: Add random scatter.s = len(COLUMNS)
+    ax_x = st.selectbox(
+        "Choose the X axis of the scatter plot below.",
+        COLUMNS,
+        index=2,
+    )
+    ax_y = st.selectbox(
+        "Choose the Y axis of the scatter plot below.",
+        COLUMNS,
+        index=3,
+    )
+
+    scatter_fig = make_2D_plot_on_players(
+        all_time_net_df,
+        ax_x,
+        ax_y,
+        selected_players,
+        xax=True,
+        yax=True,
+    )
+    st.pyplot(scatter_fig)
+
+    st.title("Static Plot")
 
     col3, col4 = st.columns(2)
     with col3:
