@@ -6,6 +6,9 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import Pipeline
 
 from src.lib import color_red_green_nums
 from src.objects import Player
@@ -114,6 +117,7 @@ def home_page(players, end_date, total_n_games):
         COLUMNS,
         index=2,
     )
+    d = st.number_input('Select degree of polynomial for curve fit', value=2)
     col5, col6 = st.columns(2)
     with col5:
         x = st.checkbox('Show y=0')
@@ -128,6 +132,7 @@ def home_page(players, end_date, total_n_games):
         selected_players,
         xax=True if x else False,
         yax=True if y else False,
+        d=d
     )
     st.pyplot(scatter_fig)
 
@@ -152,7 +157,7 @@ def home_page(players, end_date, total_n_games):
         )
         st.pyplot(fig)
 
-def make_2D_plot_on_players(df, c1: str, c2: str, selected_players: List, xax=False, yax=False):
+def make_2D_plot_on_players(df, c1: str, c2: str, selected_players: List, xax=False, yax=False, d=2):
     x = df[c1]
     y = df[c2]
 
@@ -161,6 +166,7 @@ def make_2D_plot_on_players(df, c1: str, c2: str, selected_players: List, xax=Fa
     if xax: plt.axhline(y=0, c="white", label="y=0", alpha=0.75)
     if yax: plt.axvline(x=0, c="white", label="x=0", alpha=0.75)
 
+    # Scatter Plot of Players
     for player in selected_players:
         plt.scatter(
             x[player.name],
@@ -173,6 +179,20 @@ def make_2D_plot_on_players(df, c1: str, c2: str, selected_players: List, xax=Fa
             y[player.name],
             f"{player.name}",
         )
+
+    # Regression of Players
+    x_np = x.values.reshape(-1, 1)
+    y_np = y.values.reshape(-1, 1)
+
+    model = Pipeline([
+        ('poly', PolynomialFeatures(degree=d)),
+        ('linear', LinearRegression(fit_intercept=False))
+    ])
+
+    model.fit(x_np, y_np)  # perform linear regression
+    x_np = sorted(x_np)
+    y_pred = model.predict(x_np)  # make predictions
+    plt.plot(x_np, y_pred, color='pink')
 
     plt.xlabel(c1)
     plt.ylabel(c2)

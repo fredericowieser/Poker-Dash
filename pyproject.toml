@@ -7,7 +7,7 @@ readme = "README.md"
 #packages = [{include = "poker_dash_board"}]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9,<3.9.7 || >3.9.7,<4.0"
 numpy = "^1.25.0"
 matplotlib = "^3.7.1"
 pandas = "^2.0.3"
@@ -21,6 +21,7 @@ notebook = "^7.0.4"
 ipython = "^8.16.1"
 ipympl = "^0.9.3"
 ipykernel = "^6.26.0"
+scikit-learn = "^1.4.1.post1"
 
 
 
