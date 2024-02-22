@@ -107,25 +107,31 @@ def home_page(players, end_date, total_n_games):
     ax_x = st.selectbox(
         "Choose the X axis of the scatter plot below.",
         COLUMNS,
-        index=2,
+        index=1,
     )
     ax_y = st.selectbox(
         "Choose the Y axis of the scatter plot below.",
         COLUMNS,
-        index=3,
+        index=2,
     )
+    col5, col6 = st.columns(2)
+    with col5:
+        x = st.checkbox('Show y=0')
+    with col6:
+        y = st.checkbox('Show x=0')
+
 
     scatter_fig = make_2D_plot_on_players(
         all_time_net_df,
         ax_x,
         ax_y,
         selected_players,
-        xax=True,
-        yax=True,
+        xax=True if x else False,
+        yax=True if y else False,
     )
     st.pyplot(scatter_fig)
 
-    st.title("Static Plot")
+    st.title("Static Plots")
 
     col3, col4 = st.columns(2)
     with col3:
