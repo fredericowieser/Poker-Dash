@@ -7,6 +7,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
+# from sklearn.gaussian_process import GaussianProcessRegressor
+# from sklearn.ensemble import GradientBoostingRegressor
+# from sklearn.gaussian_process.kernels import RBF, Matern, RationalQuadratic
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.pipeline import Pipeline
 
@@ -119,7 +123,7 @@ def home_page(players, end_date, total_n_games):
         COLUMNS,
         index=2,
     )
-    d = st.number_input('Select degree of polynomial for curve fit', value=2)
+    d = st.number_input('Select degree of polynomial for curve fit', value=1)
     col5, col6 = st.columns(2)
     with col5:
         x = st.checkbox('Show y=0')
@@ -138,28 +142,51 @@ def home_page(players, end_date, total_n_games):
     )
     st.pyplot(scatter_fig)
 
-    st.title("Static Plots")
+    # st.title("Static Plots")
 
-    col3, col4 = st.columns(2)
-    with col3:
-        fig1 = make_2D_plot_on_players(
-            all_time_net_df,
-            "Std. Dev. WN (£)",
-            "Avg. Buy-Ins",
-            selected_players
-        )
-        st.pyplot(fig1)
-    with col4:
-        fig = make_2D_plot_on_players(
-            all_time_net_df,
-            "Std. Dev. WN (£)",
-            "Avg. WN (£)",
-            selected_players,
-            xax=True,
-        )
-        st.pyplot(fig)
+    # col3, col4 = st.columns(2)
+    # with col3:
+    #     fig1 = make_2D_plot_on_players(
+    #         all_time_net_df,
+    #         "Std. Dev. WN (£)",
+    #         "Avg. Buy-Ins",
+    #         selected_players
+    #     )
+    #     st.pyplot(fig1)
+    # with col4:
+    #     fig = make_2D_plot_on_players(
+    #         all_time_net_df,
+    #         "Std. Dev. WN (£)",
+    #         "Avg. WN (£)",
+    #         selected_players,
+    #         xax=True,
+    #     )
+    #     st.pyplot(fig)
 
-def make_2D_plot_on_players(df, c1: str, c2: str, selected_players: List, xax=False, yax=False, d=2):
+    st.title("Correlation Matrix")
+    net_df = pd.DataFrame(
+        data,
+        columns=COLUMNS,
+    )
+    f = make_corr_matrix(net_df)
+    st.pyplot(f)
+
+def make_corr_matrix(df):
+    f = plt.figure()
+    corr = df._get_numeric_data()
+
+    # breakpoint()
+
+    corr = corr.corr()
+    plt.imshow(corr, cmap='jet')
+    plt.xticks(range(len(corr.columns)), corr.columns, rotation = 90)
+    plt.yticks(range(len(corr.columns)), corr.columns)
+    cb = plt.colorbar()
+    cb.ax.tick_params()
+    plt.title('Correlation Matrix', fontsize=16);
+    return f
+
+def make_2D_plot_on_players(df, c1: str, c2: str, selected_players: List, xax=False, yax=False, d=1):
     x = df[c1]
     y = df[c2]
 
@@ -183,7 +210,7 @@ def make_2D_plot_on_players(df, c1: str, c2: str, selected_players: List, xax=Fa
         )
 
     # Regression of Players
-    x_np = x.values.reshape(-1, 1)
+    X = x.values.reshape(-1, 1)
     y_np = y.values.reshape(-1, 1)
 
     model = Pipeline([
@@ -191,10 +218,29 @@ def make_2D_plot_on_players(df, c1: str, c2: str, selected_players: List, xax=Fa
         ('linear', LinearRegression(fit_intercept=False))
     ])
 
-    model.fit(x_np, y_np)  # perform linear regression
-    x_np_sorted = sorted(x_np)
+    # Normalize features
+    X_scaler = StandardScaler()
+    X_normalized = X_scaler.fit_transform(X)
+
+    # Normalize target
+    y_scaler = MinMaxScaler()
+    y_normalized = y_scaler.fit_transform(y_np.reshape(-1, 1)).ravel()  # Reshape y to 2D array for scaling and then back to 1D
+
+    # Kernel selection
+    # kernel = RBF(length_scale=30.0, length_scale_bounds=(1e-2, 1e2))
+    # kernel = Matern() # length_scale=30.0, length_scale_bounds=(1e-2, 1e2))
+    # kernel = RationalQuadratic(length_scale=1.0, length_scale_bounds=(1e-2, 1e2))
+
+    # Instantiate and train the GPR model
+    # gpr = GaussianProcessRegressor(kernel=kernel, alpha=1e-10, normalize_y=True)  # normalize_y can be True since we're manually scaling y
+    # gpr = GradientBoostingRegressor(random_state=0)
+    model.fit(X_normalized, y_normalized)
+
+    x_np_sorted = sorted(X)
     x_lin = np.linspace(x_np_sorted[0], x_np_sorted[-1])
-    y_pred = model.predict(x_lin)  # make predictions
+
+    y_pred_normalised = model.predict(X_scaler.fit_transform(x_lin))  # make predictions
+    y_pred = y_scaler.inverse_transform(y_pred_normalised.reshape(-1, 1)).ravel()
     plt.plot(x_lin, y_pred, color='pink')
 
     plt.xlabel(c1)
