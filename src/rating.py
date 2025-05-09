@@ -2,7 +2,6 @@ import numpy as np
 
 from src.objects import GameRating
 
-SENS_VAL_1 = 50
 
 def get_rating_arr_for_game(game: np.ndarray, player_ratings):
     n_players = len(game)
@@ -47,8 +46,8 @@ def get_game_rating(game_players: np.ndarray, date):
             rating_sum += calc_comp_rating_sum(net_diff, pot_total, player, comp_player)
 
         player.new_game_data_rating = (
-            player.current_rating() + (SENS_VAL_1 / (n_players - 1)) * rating_sum
-        ) * (0.01 * float(player.name == 'Nikita') + 1)
+            player.current_rating() + (50 / (n_players - 1)) * rating_sum
+        )
 
     for player in game_players:
         player.player_rating.set_new_rating()

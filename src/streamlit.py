@@ -13,7 +13,6 @@ from src.lib import color_red_green_nums
 from src.pages.home import home_page
 from src.pages.player_comparison import players_page
 from src.pages.game_comparison import games_page
-from src.pages.example import example_page
 
 
 def make_gui(df, players, games):
@@ -37,8 +36,6 @@ def make_gui(df, players, games):
         players_page(players)
     if mode == "Games":
         games_page(games)
-    if mode == "Example":
-        example_page()
 
 
 def make_sidebar():
@@ -48,7 +45,6 @@ def make_sidebar():
             "Home",
             "Players",
             "Games",
-            "Example",
             # TODO: "Player Groups",
             # TODO: "Running Aggregates",
         ],
@@ -56,7 +52,6 @@ def make_sidebar():
             "house",
             "person",
             "bullseye",
-            "people"
             #"people",
             #'clock'
         ],
